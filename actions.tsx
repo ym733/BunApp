@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-const pg = require('pg');
+import { Database } from "bun:sqlite";
 const config = require('./config.json');
 
 const BaseHTML = ({ children }: elements.Children) => `
@@ -35,15 +35,9 @@ export class Actions {
     }
 
     async getAllUsers() {
-        const client = new pg.Client(config["db_params"])
-        console.log(config["db_params"])
-        await client.connect()
-        console.log("here?")
-        const res = await client.query('SELECT * FROM \"fishPoints\"')
-        console.log(res)
-        const response = JSON.stringify(res.rows, null, 4)
-        await client.end()
-
-        return response
+        const db = new Database("Application.db");
+        const query = db.query("select * from user;");
+        //console.log(query.values())
+        return JSON.stringify(query.all(), null, 4)
     }
 }
