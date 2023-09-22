@@ -3,6 +3,7 @@
   "module": "index.tsx",
   "type": "module",
   "devDependencies": {
+    "@types/pg": "^8.10.2",
     "bun-types": "latest",
     "typed-html": "^3.0.1"
   },
@@ -11,6 +12,10 @@
   },
   "dependencies": {
     "@elysiajs/html": "^0.6.6",
-    "elysia": "^0.6.24"
+    "elysia": "^0.6.24",
+    "pg": "^8.11.3"
+  },
+  "scripts": {
+    "start": "npm run index.tsx"
   }
 }
