@@ -170,5 +170,5 @@ dist
 
 # IntelliJ based IDEs
 .idea
-/config.json
-/Application.db
+/src/config.json
+/src/Application.db

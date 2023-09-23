@@ -1,6 +1,6 @@
 {
   "name": "bunapplication",
-  "module": "index.tsx",
+  "module": "src/index.tsx",
   "type": "module",
   "devDependencies": {
     "@types/pg": "^8.10.2",
@@ -12,10 +12,9 @@
   },
   "dependencies": {
     "@elysiajs/html": "^0.6.6",
-    "elysia": "^0.6.24",
-    "pg": "^8.11.3"
+    "elysia": "^0.6.24"
   },
   "scripts": {
-    "start": "npm run index.tsx"
+    "start": "bun run src/index.tsx"
   }
 }
