@@ -52,13 +52,12 @@ export class Actions {
         </BaseHTML>
     }
 
-    addUserPost(name, email, password) {
+    addUserPost(name : string, email : string, password :string) {
         const provider = new DataProvider()
         provider.addUser(name, email, password);
         return <BaseHTML>
-            <center>
-                <h1>SUCCESS</h1>
-            </center>
+            <h1>SUCCESS</h1>
+            
         </BaseHTML>
     }
 

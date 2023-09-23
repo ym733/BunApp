@@ -19,7 +19,7 @@ export class DataProvider {
     }
 
     //NON-QUERY
-    addUser(name, email, password){
+    addUser(name : string, email : string, password : string){
         const queryText = `insert into users values((select max(id)+1 from users), '${name}', '${email}', '${password}');`;
         const query = this.db.query(queryText);
         query.run();
