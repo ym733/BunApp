@@ -1,5 +1,5 @@
 import * as elements from "typed-html";
-const config = require('./config.json');
+import config from './config.json'
 import {DataProvider} from "./DataProvider";
 
 const BaseHTML = ({ children }) => `<!DOCTYPE html>
@@ -13,7 +13,7 @@ const BaseHTML = ({ children }) => `<!DOCTYPE html>
     <title>BUN APP</title>
   </head>
   <body>
-    ${children}
+    ${children.join("")}
   </body>
 </html>`;
 
@@ -22,7 +22,9 @@ export class Actions {
         return <BaseHTML>
             <a href="./getallUsers">get all users</a>
             <br/>
-            <a href="./addUser">add user</a>
+            <a href="./register">register</a>
+            <br />
+            <a href="./login">login</a>
             <div class="flex w-full h-screen justify-center items-center">
                 <button hx-post="/clicked" hx-swap="outerHTML">
                     Click Me
@@ -35,9 +37,9 @@ export class Actions {
         return <div class="text-blue-600">YOU CLICKED THE BUTTON???!!!</div>
     }
 
-    addUser() {
+    register() {
         return <BaseHTML>
-            <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="/../addUser">
+            <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="/../register">
                 <label for="name" class="text-gray-800 font-medium">Name</label>
                 <input type="text" name="name" id="name" class="rounded border border-gray-300 p-2" placeholder="Enter your name" />
 
@@ -52,16 +54,15 @@ export class Actions {
         </BaseHTML>
     }
 
-    addUserPost(name : string, email : string, password :string) {
+    registerPost(name:string, email:string, password:string) {
         const provider = new DataProvider()
         provider.addUser(name, email, password);
         return <BaseHTML>
             <h1>SUCCESS</h1>
-            
         </BaseHTML>
     }
 
-    async getAllUsers() {
+    getAllUsers() {
         const provider = new DataProvider();
         const response = provider.getAllUsers();
         return <BaseHTML>
@@ -87,7 +88,30 @@ export class Actions {
                 }
                 </tbody>
             </table>
-
         </BaseHTML>
+    }
+
+    login() {
+        return <BaseHTML>
+            <div class="container mx-auto flex justify-center items-center h-screen">
+                <div class="card w-full md:w-1/2 p-6">
+                    <h2 class="text-center text-2xl font-bold">Login</h2>
+                    <form action="#" method="post">
+                        <div class="mb-4">
+                            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                            <input type="text" id="username" name="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                        </div>
+                        <div class="mb-6">
+                            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                            <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" value="Login" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </BaseHTML>
+
     }
 }

@@ -15,6 +15,7 @@
     "elysia": "^0.6.24"
   },
   "scripts": {
-    "start": "bun run src/index.tsx"
+    "start": "bun run src/index.tsx",
+    "dev": "bun --watch src/index.tsx"
   }
 }
