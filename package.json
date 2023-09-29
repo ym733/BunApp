@@ -3,7 +3,6 @@
   "module": "src/index.tsx",
   "type": "module",
   "devDependencies": {
-    "@types/pg": "^8.10.2",
     "bun-types": "latest",
     "typed-html": "^3.0.1"
   },

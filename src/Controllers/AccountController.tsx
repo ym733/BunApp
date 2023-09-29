@@ -1,7 +1,9 @@
 import { Elysia, t } from "elysia";
 import { cookie } from '@elysiajs/cookie';
 import { html } from "@elysiajs/html";
-import { BaseHTML } from "../BaseHTML";
+import { DataProvider } from "../DataProvider";
+import * as elements from "typed-html";
+import { BaseHTML } from "../Components/BaseHTML";
 
 export const AccountController = new Elysia()
     .use(html())
