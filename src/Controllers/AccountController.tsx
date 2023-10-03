@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
-import { cookie } from '@elysiajs/cookie';
+import { auth } from '../Components/auth';
+import { user } from '../Models/User';
 import { html } from "@elysiajs/html";
 import { DataProvider } from "../DataProvider";
 import * as elements from "typed-html";
@@ -7,17 +8,17 @@ import { BaseHTML } from "../Components/BaseHTML";
 
 export const AccountController = new Elysia()
     .use(html())
-    .use(cookie())
+    .use(auth)
     .get("/getallUsers", () => pages.getAllUsers())
     .get("/getUser/:id", ({ params: { id } }) => {
         const provider = new DataProvider()
-        const user = JSON.stringify(provider.getUserByID(id));
+        const user: user = provider.getUserByID(id);
         provider.close()
 
         return pages.getUser(user)
     })
 
-    .get("/currentUser", ({ cookie: { user } }) => pages.getUser(user));
+    .get("/currentUser", ({ getCookie }) => pages.getUser(getCookie()));
 
 class pages {
 
@@ -52,14 +53,14 @@ class pages {
         </BaseHTML>
     }
 
-    static getUser(user: string) {
-        if (user == 'undefined' || user == undefined) {
+    static getUser(user: user) {
+        if (user == undefined) {
             return 'user undefined'
         }
 
-        const model = JSON.parse(user)
-        
-        
+        const model = user
+
+
         return <BaseHTML>
             <table>
                 <thead class="bg-gray-50">

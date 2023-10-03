@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 import { cookie } from '@elysiajs/cookie';
+import { auth } from '../Components/auth';
 import { html } from "@elysiajs/html";
 import { BaseHTML } from "../Components/BaseHTML";
 import { DataProvider } from '../DataProvider';
@@ -7,34 +8,26 @@ import * as elements from "typed-html";
 
 export const AuthController = new Elysia()
     .use(html())
-    .use(cookie())
+    .use(auth)
     .group("/register", (app) => app
         .get("/", () => pages.register())
 
-        .post("/", async ({ set, body, cookie: { user }, setCookie }) => {
+        .post("/", async ({ set, body, setCookie }) => {
             pages.registerPost(body.name, body.email, await Bun.password.hash(body.password));
-            setCookie(
-                'user',
-                JSON.stringify(await pages.loginUser(body.name, body.password)),
-                { expires: new Date(new Date(Date.now() + 24 * 60 * 60 * 1000)) }
-            );
+            setCookie(await pages.loginUser(body.name, body.password));
             set.redirect = "/"
         }, { body: t.Object({ name: t.String(), email: t.String(), password: t.String() }) })
     )
 
     .group("/login", (app) => app
         .get("/", () => pages.login())
-        .post("/", async ({ set, body, cookie: { user }, setCookie }) => {
-            setCookie(
-                'user',
-                JSON.stringify(await pages.loginUser(body.name, body.password)),
-                { expires: new Date(new Date(Date.now() + 24 * 60 * 60 * 1000)) }
-            );
+        .post("/", async ({ set, body, setCookie }) => {
+            setCookie(await pages.loginUser(body.name, body.password));
             set.redirect = "/"
         }, { body: t.Object({ name: t.String(), password: t.String() }) })
     )
 
-    .get("/logout", ({ set, cookie: { user }, removeCookie }) => { removeCookie('user'); set.redirect = "/" });
+    .get("/logout", ({ set, removeCookie }) => { removeCookie(); set.redirect = "/" });
 
 class pages {
 

@@ -18,7 +18,7 @@ class pages {
 
     static index() {
         return <BaseHTML>
-            <div class="text-3xl">
+            <div class="text-2xl">
                 <a class="hover:underline" href="./getallUsers">get all users</a>
                 <br />
                 <a class="hover:underline" href="./hxtrick">hxtrick</a>

@@ -1,4 +1,6 @@
 import { Database } from "bun:sqlite";
+import { user } from '../Models/User';
+
 
 export class DataProvider {
     private db: Database;
@@ -18,13 +20,13 @@ export class DataProvider {
         return query.all();
     }
 
-    getUserByInfo(name: string) {
+    getUserByInfo(name: string): user {
         const queryText = `select * from users where name='${name}';`;
         const query = this.db.query(queryText);
         return query.all()[0];
     }
 
-    getUserByID(id: string) {
+    getUserByID(id: string): user {
         const queryText = `select * from users where id='${id}';`;
         const query = this.db.query(queryText);
         return query.all()[0];
