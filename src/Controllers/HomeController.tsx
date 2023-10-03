@@ -18,17 +18,21 @@ class pages {
 
     static index() {
         return <BaseHTML>
-            <a href="./getallUsers">get all users</a>
-            <br />
-            <a href="./hxtrick">hxtrick</a>
-            <br />
-            <a href="./register">register</a>
-            <br />
-            <a href="./login">login</a>
-            <br />
-            <a href="./logout">logout</a>
-            <br />
-            <a href="./currentUser">current user</a>
+            <div class="text-3xl">
+                <a class="hover:underline" href="./getallUsers">get all users</a>
+                <br />
+                <a class="hover:underline" href="./hxtrick">hxtrick</a>
+                <br />
+                <a class="hover:underline" href="./register">register</a>
+                <br />
+                <a class="hover:underline" href="./login">login</a>
+                <br />
+                <a class="hover:underline" href="./logout">logout</a>
+                <br />
+                <a class="hover:underline" href="./currentUser">current user</a>
+                <br />
+                <div class="hover:underline">get user&nbsp;&nbsp;&nbsp;<input id="userID" class="border w-1/12" type="number" placeholder="enter id" /><button onclick="window.location.href = `./getUser/${document.getElementById('userID').value}`;">Go</button></div>
+            </div>
         </BaseHTML>
     }
 

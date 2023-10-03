@@ -58,6 +58,8 @@ class pages {
     static registerPost(name: string, email: string, password: string) {
         const provider = new DataProvider()
         provider.addUser(name, email, password);
+        provider.close()
+
         return <BaseHTML>
             <h1>SUCCESS</h1>
         </BaseHTML>
@@ -66,6 +68,7 @@ class pages {
     static async loginUser(name: string, password: string) {
         const provider = new DataProvider()
         const model: any = provider.getUserByInfo(name)
+        provider.close()
 
         if (await Bun.password.verify(password, model["password"])) {
             return model

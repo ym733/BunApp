@@ -9,15 +9,23 @@ export const AccountController = new Elysia()
     .use(html())
     .use(cookie())
     .get("/getallUsers", () => pages.getAllUsers())
+    .get("/getUser/:id", ({ params: { id } }) => {
+        const provider = new DataProvider()
+        const user = JSON.stringify(provider.getUserByID(id));
+        provider.close()
 
-    .get("/currentUser", ({ cookie: { user } }) => pages.getCurrentUser(user));
+        return pages.getUser(user)
+    })
 
+    .get("/currentUser", ({ cookie: { user } }) => pages.getUser(user));
 
 class pages {
 
     static getAllUsers() {
         const provider = new DataProvider();
         const response = provider.getAllUsers();
+        provider.close()
+
         return <BaseHTML>
             <table>
                 <thead class="bg-gray-50">
@@ -44,15 +52,14 @@ class pages {
         </BaseHTML>
     }
 
-
-
-    static getCurrentUser(user: string) {
+    static getUser(user: string) {
         if (user == 'undefined' || user == undefined) {
             return 'user undefined'
         }
 
         const model = JSON.parse(user)
-
+        
+        
         return <BaseHTML>
             <table>
                 <thead class="bg-gray-50">

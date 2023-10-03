@@ -24,6 +24,12 @@ export class DataProvider {
         return query.all()[0];
     }
 
+    getUserByID(id: string) {
+        const queryText = `select * from users where id='${id}';`;
+        const query = this.db.query(queryText);
+        return query.all()[0];
+    }
+
     //NON-QUERY
     addUser(name: string, email: string, password: string) {
         const queryText = `insert into users values((select max(id)+1 from users), '${name}', '${email}', '${password}');`;
