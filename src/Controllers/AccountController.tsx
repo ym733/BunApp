@@ -1,10 +1,10 @@
-import { Elysia, t } from "elysia";
-import { auth } from '../Components/auth';
+import { Elysia } from "elysia";
+import { auth } from '../Tools/auth';
 import { user } from '../Models/User';
 import { html } from "@elysiajs/html";
-import { DataProvider } from "../DataProvider";
+import { DataProvider } from "../Tools/DataProvider";
 import * as elements from "typed-html";
-import { BaseHTML } from "../Components/BaseHTML";
+import { BaseHTML } from "../Tools/BaseHTML";
 
 export const AccountController = new Elysia()
     .use(html())
@@ -12,7 +12,7 @@ export const AccountController = new Elysia()
     .get("/getallUsers", () => pages.getAllUsers())
     .get("/getUser/:id", ({ params: { id } }) => {
         const provider = new DataProvider()
-        const user: user = provider.getUserByID(id);
+        const user = provider.getUserByID(id);
         provider.close()
 
         return pages.getUser(user)

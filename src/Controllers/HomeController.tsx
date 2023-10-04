@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { html } from "@elysiajs/html";
-import { BaseHTML } from "../Components/BaseHTML";
+import { BaseHTML } from "../Tools/BaseHTML";
 import * as elements from "typed-html";
 
 export const HomeController = new Elysia()

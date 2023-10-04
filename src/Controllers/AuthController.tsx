@@ -1,9 +1,8 @@
 import { Elysia, t } from "elysia";
-import { cookie } from '@elysiajs/cookie';
-import { auth } from '../Components/auth';
+import { auth } from '../Tools/auth';
 import { html } from "@elysiajs/html";
-import { BaseHTML } from "../Components/BaseHTML";
-import { DataProvider } from '../DataProvider';
+import { BaseHTML } from "../Tools/BaseHTML";
+import { DataProvider } from '../Tools/DataProvider';
 import * as elements from "typed-html";
 
 export const AuthController = new Elysia()
@@ -64,7 +63,7 @@ class pages {
         provider.close()
 
         if (await Bun.password.verify(password, model["password"])) {
-            return model
+            return { id: model["id"], name: model["name"] }
         } else {
             return undefined
         }

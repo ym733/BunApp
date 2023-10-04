@@ -3,6 +3,8 @@ import { AuthController } from './Controllers/AuthController';
 import { HomeController } from './Controllers/HomeController';
 import { AccountController } from './Controllers/AccountController'
 
+console.log("Program running")
+
 const app = new Elysia()
     .use(AuthController)
     .use(HomeController)
