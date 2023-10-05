@@ -21,7 +21,14 @@ export const AuthController = new Elysia()
     .group("/login", (app) => app
         .get("/", () => pages.login())
         .post("/", async ({ set, body, setCookie }) => {
-            setCookie(await pages.loginUser(body.name, body.password));
+            const user = await pages.loginUser(body.name, body.password)
+
+            //validation
+            if (user == undefined) {
+                return pages.login("wrong name or password")
+            }
+
+            setCookie(user);
             set.redirect = "/"
         }, { body: t.Object({ name: t.String(), password: t.String() }) })
     )
@@ -69,11 +76,11 @@ class pages {
         }
     }
 
-    static login() {
+    static login(message: string = "") {
         return <BaseHTML>
             <div class="container mx-auto flex justify-center items-center h-screen">
                 <div class="card w-full md:w-1/2 p-6">
-                    <h2 class="text-center text-2xl font-bold">Login</h2>
+                    <h2 class="text-center text-2xl font-bold">Login</h2><h2 class="text-center text-2xl font-bold text-red-600">{message}</h2>
                     <form action="/../login" method="post">
                         <div class="mb-4">
                             <label for="name" class="block text-gray-700 text-sm font-bold mb-2">name</label>

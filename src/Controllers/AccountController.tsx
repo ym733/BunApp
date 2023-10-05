@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { auth } from '../Tools/auth';
 import { user } from '../Models/User';
 import { html } from "@elysiajs/html";
@@ -10,15 +10,18 @@ export const AccountController = new Elysia()
     .use(html())
     .use(auth)
     .get("/getallUsers", () => pages.getAllUsers())
-    .get("/getUser/:id", ({ params: { id } }) => {
-        const provider = new DataProvider()
-        const user = provider.getUserByID(id);
-        provider.close()
+    .group("/getUser", (app) => app
+        .get("/", () => {
+            return pages.getUser()
+        })
+        .post("/", ({ body: { id } }) => {
+            const userID = parseInt(id);
 
-        return pages.getUser(user)
-    })
+            return pages.getUserPost(userID)
+        }, { body: t.Object({ id: t.String() }) })
+    )
 
-    .get("/currentUser", ({ getCookie }) => pages.getUser(getCookie()));
+    .get("/currentUser", ({ getCookie }) => pages.getCurrentUser(getCookie()));
 
 class pages {
 
@@ -53,13 +56,54 @@ class pages {
         </BaseHTML>
     }
 
-    static getUser(user: user) {
+    static getUser() {
+        return <BaseHTML>
+            <form hx-post="/getUser" hx-target="#userDiv" hx-swap="innerHTML">
+                <div class="hover:underline">get user&nbsp;&nbsp;&nbsp;
+                    <input name="id" class="border w-1/12" type="number" placeholder="enter id" />
+                    <input type="submit" value="Go" />
+                </div>
+            </form>
+            <div id="userDiv">
+
+            </div>
+        </BaseHTML>
+    }
+
+    static getUserPost(id: number) {
+        const provider = new DataProvider()
+        const user = provider.getUserByID(id);
+        provider.close()
+
+
         if (user == undefined) {
             return 'user undefined'
         }
 
-        const model = user
+        return <table>
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["id"]}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["name"]}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["email"]}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["password"]}</td>
+                </tr>
+            </tbody>
+        </table>
+    }
 
+    static getCurrentUser(user: user) {
+        if (user == undefined) {
+            return 'user undefined'
+        }
 
         return <BaseHTML>
             <table>
@@ -73,10 +117,10 @@ class pages {
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{model["id"]}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{model["name"]}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{model["email"]}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{model["password"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["id"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["name"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["email"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["password"]}</td>
                     </tr>
                 </tbody>
             </table>

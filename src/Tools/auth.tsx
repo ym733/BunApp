@@ -9,9 +9,11 @@ export const auth = new Elysia()
     .derive(({ cookie: { user }, setCookie, removeCookie }) => {
         return {
             getCookie: (): user => {
+                if (user == undefined) return user;
+
                 //returns a full user object or undefined 
                 const encryptionObj = user.split(";")
-                
+
                 const decryptedData = DataEncryptor.decryptMessage(encryptionObj[0], encryptionObj[1], encryptionObj[2])
 
                 let current_user = JSON.parse(decryptedData)
@@ -28,7 +30,7 @@ export const auth = new Elysia()
                 //parameter data is an id and username or undefined
                 const message = JSON.stringify(data)
 
-                const encryptionObj:encryption = DataEncryptor.encryptMessage(message)
+                const encryptionObj: encryption = DataEncryptor.encryptMessage(message)
 
                 setCookie('user', `${encryptionObj["message"]};${encryptionObj["key"]};${encryptionObj["iv"]}`);
             },

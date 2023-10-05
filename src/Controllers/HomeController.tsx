@@ -31,7 +31,9 @@ class pages {
                 <br />
                 <a class="hover:underline" href="./currentUser">current user</a>
                 <br />
-                <div class="hover:underline">get user&nbsp;&nbsp;&nbsp;<input id="userID" class="border w-1/12" type="number" placeholder="enter id" /><button onclick="window.location.href = `./getUser/${document.getElementById('userID').value}`;">Go</button></div>
+                <a class="hover:underline" href="./getUser">get user</a>
+                <br />
+
             </div>
         </BaseHTML>
     }
