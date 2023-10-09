@@ -11,7 +11,13 @@ export const HomeController = new Elysia()
     .group("/hxtrick", (app) => app
         .get("/", () => pages.hxtrick())
         .post("/clicked", () => pages.clicked())
-    );
+    )
+
+    .group("/random", (app) => app
+        .get("/", () => pages.random())
+        .post("/dog", () => pages.randomDog())
+        .post("/cat", () => pages.randomCat())
+    )
 
 
 class pages {
@@ -33,7 +39,9 @@ class pages {
                 <br />
                 <a class="hover:underline" href="./getUser">get user</a>
                 <br />
-
+                <a class="hover:underline" href="./random">random</a>
+                <br />
+                
             </div>
         </BaseHTML>
     }
@@ -52,4 +60,34 @@ class pages {
         return <div class="text-blue-600">YOU CLICKED THE BUTTON???!!!</div>
     }
 
+    static random() {
+        return <BaseHTML>
+            <div class="text-2xl">
+                <button class="hover:underline" hx-post="./random/cat" hx-target="#catimg" hx-swap="innerHTML">get random cat</button>
+                <br />
+                <div id="catimg"></div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <button class="hover:underline" hx-post="./random/dog" hx-target="#dogimg" hx-swap="innerHTML">get random dog</button>
+                <br />
+                <div id="dogimg"></div>
+            </div>
+        </BaseHTML>
+    }
+
+    static async randomCat() {
+        const response = await fetch("https://api.thecatapi.com/v1/images/search");
+        const html = await response.json(); // HTML string
+        return <img src={html[0]["url"]}/>
+    }
+    
+    static async randomDog() {
+        const response = await fetch("https://api.thedogapi.com/v1/images/search");
+        const html = await response.json(); // HTML string
+        return <img src={html[0]["url"]}/>
+    }
+    
 }
