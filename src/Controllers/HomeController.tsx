@@ -24,24 +24,8 @@ class pages {
 
     static index() {
         return <BaseHTML>
-            <div class="text-2xl">
-                <a class="hover:underline" href="./getallUsers">get all users</a>
-                <br />
-                <a class="hover:underline" href="./hxtrick">hxtrick</a>
-                <br />
-                <a class="hover:underline" href="./register">register</a>
-                <br />
-                <a class="hover:underline" href="./login">login</a>
-                <br />
-                <a class="hover:underline" href="./logout">logout</a>
-                <br />
-                <a class="hover:underline" href="./currentUser">current user</a>
-                <br />
-                <a class="hover:underline" href="./getUser">get user</a>
-                <br />
-                <a class="hover:underline" href="./random">random</a>
-                <br />
-                
+            <div class="text-6xl flex justify-center">
+                MAIN PAGE
             </div>
         </BaseHTML>
     }

@@ -11,6 +11,22 @@ export const BaseHTML = ({ children }: elements.Children) => `<!DOCTYPE html>
     <title>BUN APP</title>
   </head>
   <body>
+  <nav class="flex justify-between items-center bg-gray-800 text-white px-6 py-4">
+  <a href="/" class="flex items-center">
+    <span class="text-xl font-bold">Bun Application</span>
+  </a>
+
+  <ul class="flex space-x-4">
+    <li><a class="hover:underline" href="./getallUsers">get all users</a></li>
+    <li><a class="hover:underline" href="./hxtrick">hxtrick</a></li>
+    <li><a class="hover:underline" href="./register">register</a></li>
+    <li><a class="hover:underline" href="./login">login</a></li>
+    <li><a class="hover:underline" href="./logout">logout</a></li>
+    <li><a class="hover:underline" href="./currentUser">current user</a></li>
+    <li><a class="hover:underline" href="./getUser">get user</a></li>
+    <li><a class="hover:underline" href="./random">random</a></li>
+  </ul>
+</nav>
     ${children.join("")}
   </body>
 </html>`;
