@@ -27,6 +27,12 @@ class pages {
             <div class="text-6xl flex justify-center">
                 MAIN PAGE
             </div>
+            <ul>
+                <li><a class="hover:underline" href="./getallUsers">get all users</a></li>
+                <li><a class="hover:underline" href="./hxtrick">hxtrick</a></li>
+                <li><a class="hover:underline" href="./getUser">get user</a></li>
+                <li><a class="hover:underline" href="./random">random</a></li>            
+            </ul>
         </BaseHTML>
     }
 
@@ -51,10 +57,6 @@ class pages {
                 <br />
                 <div id="catimg"></div>
                 <br />
-                <br />
-                <br />
-                <br />
-                <br />
                 <button class="hover:underline" hx-post="./random/dog" hx-target="#dogimg" hx-swap="innerHTML">get random dog</button>
                 <br />
                 <div id="dogimg"></div>
@@ -64,13 +66,13 @@ class pages {
 
     static async randomCat() {
         const response = await fetch("https://api.thecatapi.com/v1/images/search");
-        const html = await response.json(); // HTML string
+        const html = await response.json();
         return <img src={html[0]["url"]}/>
     }
     
     static async randomDog() {
         const response = await fetch("https://api.thedogapi.com/v1/images/search");
-        const html = await response.json(); // HTML string
+        const html = await response.json();
         return <img src={html[0]["url"]}/>
     }
     

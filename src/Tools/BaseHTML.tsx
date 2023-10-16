@@ -17,15 +17,10 @@ export const BaseHTML = ({ children }: elements.Children) => `<!DOCTYPE html>
   </a>
 
   <ul class="flex space-x-4">
-    <li><a class="hover:underline" href="./getallUsers">get all users</a></li>
-    <li><a class="hover:underline" href="./hxtrick">hxtrick</a></li>
-    <li><a class="hover:underline" href="./register">register</a></li>
     <li><a class="hover:underline" href="./login">login</a></li>
     <li><a class="hover:underline" href="./logout">logout</a></li>
     <li><a class="hover:underline" href="./currentUser">current user</a></li>
-    <li><a class="hover:underline" href="./getUser">get user</a></li>
-    <li><a class="hover:underline" href="./random">random</a></li>
-  </ul>
+    </ul>
 </nav>
     ${children.join("")}
   </body>

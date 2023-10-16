@@ -39,7 +39,7 @@ class pages {
 
     static register() {
         return <BaseHTML>
-            <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="/../register">
+            <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="../register">
                 <label for="name" class="text-gray-800 font-medium">Name</label>
                 <input type="text" name="name" id="name" class="rounded border border-gray-300 p-2" placeholder="Enter your name" />
 
@@ -93,6 +93,7 @@ class pages {
                         <div class="flex items-center justify-between">
                             <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" value="Login" />
                         </div>
+                        <a class="hover:underline text-blue-600" href="../register">register</a>
                     </form>
                 </div>
             </div>
