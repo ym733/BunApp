@@ -9,23 +9,8 @@ import { BaseHTML } from "../Tools/BaseHTML";
 export const AccountController = new Elysia()
     .use(html())
     .use(auth)
-    .get("/getallUsers", () => pages.getAllUsers())
-    .group("/getUser", (app) => app
-        .get("/", () => {
-            return pages.getUser()
-        })
-        .post("/", ({ body: { id } }) => {
-            const userID = parseInt(id);
 
-            return pages.getUserPost(userID)
-        }, { body: t.Object({ id: t.String() }) })
-    )
-
-    .get("/currentUser", ({ getCookie }) => pages.getCurrentUser(getCookie()));
-
-class pages {
-
-    static getAllUsers() {
+    .get("/getallUsers", () => {
         const provider = new DataProvider();
         const response = provider.getAllUsers();
         provider.close()
@@ -54,53 +39,57 @@ class pages {
                 </tbody>
             </table>
         </BaseHTML>
-    }
+    })
 
-    static getUser() {
-        return <BaseHTML>
-            <form hx-post="/getUser" hx-target="#userDiv" hx-swap="innerHTML">
-                <div class="hover:underline">get user&nbsp;&nbsp;&nbsp;
-                    <input name="id" class="border w-1/12" type="number" placeholder="enter id" />
-                    <input type="submit" value="Go" />
+    .group("/getUser", (app) => app
+        .get("/", () => {
+            return <BaseHTML>
+                <form hx-post="/getUser" hx-target="#userDiv" hx-swap="innerHTML">
+                    <div class="hover:underline">get user&nbsp;&nbsp;&nbsp;
+                        <input name="id" class="border w-1/12" type="number" placeholder="enter id" />
+                        <input type="submit" value="Go" />
+                    </div>
+                </form>
+                <div id="userDiv">
+    
                 </div>
-            </form>
-            <div id="userDiv">
+            </BaseHTML>
+        })
 
-            </div>
-        </BaseHTML>
-    }
+        .post("/", ({ body: { id } }) => {
+            const provider = new DataProvider()
+            const user = provider.getUserByID(parseInt(id));
+            provider.close()
+    
+    
+            if (user == undefined) {
+                return 'user undefined'
+            }
+    
+            return <table>
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["id"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["name"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["email"]}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["password"]}</td>
+                    </tr>
+                </tbody>
+            </table>
+        }, { body: t.Object({ id: t.String() }) })
+    )
 
-    static getUserPost(id: number) {
-        const provider = new DataProvider()
-        const user = provider.getUserByID(id);
-        provider.close()
-
-
-        if (user == undefined) {
-            return 'user undefined'
-        }
-
-        return <table>
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["id"]}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["name"]}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["email"]}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["password"]}</td>
-                </tr>
-            </tbody>
-        </table>
-    }
-
-    static getCurrentUser(user: user) {
+    .get("/currentUser", ({ getCookie }) => {
+        const user:user = getCookie();
+        
         if (user == undefined) {
             return 'user undefined'
         }
@@ -125,5 +114,5 @@ class pages {
                 </tbody>
             </table>
         </BaseHTML>
-    }
-}
+    });
+    

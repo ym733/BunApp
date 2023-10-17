@@ -6,6 +6,7 @@ import { cookie } from '@elysiajs/cookie';
 
 export const auth = new Elysia()
     .use(cookie())
+
     .derive(({ cookie: { user }, setCookie, removeCookie }) => {
         return {
             getCookie: (): user => {
@@ -39,3 +40,10 @@ export const auth = new Elysia()
             }
         }
     })
+    .derive(({getCookie}) => {
+        return {
+            isUser: (): boolean => {
+                return getCookie() != undefined
+            }
+        }
+    });

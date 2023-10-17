@@ -1,6 +1,7 @@
 import * as elements from "typed-html";
 
-export const BaseHTML = ({ children }: elements.Children) => `<!DOCTYPE html>
+export const BaseHTML = ({ children }: elements.Children) => {
+  return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -17,11 +18,14 @@ export const BaseHTML = ({ children }: elements.Children) => `<!DOCTYPE html>
   </a>
 
   <ul class="flex space-x-4">
-    <li><a class="hover:underline" href="./login">login</a></li>
+     
     <li><a class="hover:underline" href="./logout">logout</a></li>
     <li><a class="hover:underline" href="./currentUser">current user</a></li>
-    </ul>
+      
+    <li><a class="hover:underline" href="./login">login</a></li>
+    
+  </ul>
 </nav>
     ${children.join("")}
   </body>
-</html>`;
+</html>`};
