@@ -4,13 +4,14 @@ import { user } from '../Models/User';
 import { html } from "@elysiajs/html";
 import { DataProvider } from "../Tools/DataProvider";
 import * as elements from "typed-html";
-import { BaseHTML } from "../Tools/BaseHTML";
+import { baseHTML } from "../Tools/BaseHTML";
 
 export const AccountController = new Elysia()
     .use(html())
     .use(auth)
+    .use(baseHTML)
 
-    .get("/getallUsers", () => {
+    .get("/getallUsers", ({ BaseHTML }) => {
         const provider = new DataProvider();
         const response = provider.getAllUsers();
         provider.close()
@@ -42,7 +43,7 @@ export const AccountController = new Elysia()
     })
 
     .group("/getUser", (app) => app
-        .get("/", () => {
+        .get("/", ({ BaseHTML }) => {
             return <BaseHTML>
                 <form hx-post="/getUser" hx-target="#userDiv" hx-swap="innerHTML">
                     <div class="hover:underline">get user&nbsp;&nbsp;&nbsp;
@@ -87,7 +88,7 @@ export const AccountController = new Elysia()
         }, { body: t.Object({ id: t.String() }) })
     )
 
-    .get("/currentUser", ({ getCookie }) => {
+    .get("/currentUser", ({ getCookie, BaseHTML }) => {
         const user:user = getCookie();
         
         if (user == undefined) {

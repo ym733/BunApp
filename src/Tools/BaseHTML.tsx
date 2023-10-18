@@ -1,31 +1,42 @@
 import * as elements from "typed-html";
+import { Elysia } from "elysia";
+import { auth } from "./auth";
 
-export const BaseHTML = ({ children }: elements.Children) => {
-  return `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>BUN APP</title>
-  </head>
-  <body>
-  <nav class="flex justify-between items-center bg-gray-800 text-white px-6 py-4">
-  <a href="/" class="flex items-center">
-    <span class="text-xl font-bold">Bun Application</span>
-  </a>
+export const baseHTML = new Elysia()
+  .use(auth)
 
-  <ul class="flex space-x-4">
-     
-    <li><a class="hover:underline" href="./logout">logout</a></li>
-    <li><a class="hover:underline" href="./currentUser">current user</a></li>
+  .derive(({isUser}) => {
+    return {
+      BaseHTML : ({ children }: elements.Children) => `<!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta http-equiv="X-UA-Compatible" content="ie=edge">
+          <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+          <script src="https://cdn.tailwindcss.com"></script>
+          <title>BUN APP</title>
+        </head>
+        <body>
+        <nav class="flex justify-between items-center bg-gray-800 text-white px-6 py-4">
+        <a href="/" class="flex items-center">
+          <span class="text-xl font-bold">Bun Application</span>
+        </a>
       
-    <li><a class="hover:underline" href="./login">login</a></li>
-    
-  </ul>
-</nav>
-    ${children.join("")}
-  </body>
-</html>`};
+        <ul class="flex space-x-4">
+
+          ${
+            (isUser()) ? 
+            `<li><a class="hover:underline" href="./logout">logout</a></li>
+            <li><a class="hover:underline" href="./currentUser">current user</a></li>`
+            :
+            `<li><a class="hover:underline" href="./login">login</a></li>`
+          }
+
+        </ul>
+      </nav>
+          ${children.join("")}
+        </body>
+      </html>`
+    }
+  })

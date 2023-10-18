@@ -1,17 +1,18 @@
 import { Elysia, t } from "elysia";
 import { auth } from '../Tools/auth';
 import { html } from "@elysiajs/html";
-import { BaseHTML } from "../Tools/BaseHTML";
+import { baseHTML } from "../Tools/BaseHTML";
 import { DataProvider } from '../Tools/DataProvider';
 import * as elements from "typed-html";
 
 export const AuthController = new Elysia()
     .use(html())
     .use(auth)
+    .use(baseHTML)
 
     .group("/register", (app) => app
 
-        .get("/", () => {
+        .get("/", ({ BaseHTML }) => {
             return <BaseHTML>
                 <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="../register">
                     <label for="name" class="text-gray-800 font-medium">Name</label>
@@ -28,20 +29,20 @@ export const AuthController = new Elysia()
             </BaseHTML>
         })
 
-        .post("/", async ({ set, body, setCookie }) => {
+        .post("/", async ({ set, body, loginCookie }) => {
             const provider = new DataProvider()
             provider.addUser(body.name, body.email, await Bun.password.hash(body.password));
             const model: any = provider.getUserByInfo(body.name)
             provider.close()
 
-            setCookie({ id: model["id"], name: model["name"] })
+            loginCookie({ id: model["id"], name: model["name"] })
             
             set.redirect = "/"
             }, { body: t.Object({ name: t.String(), email: t.String(), password: t.String() }) })
         )
 
     .group("/login", (app) => app
-        .get("/", () => {
+        .get("/", ({ BaseHTML }) => {
             return <BaseHTML>
                 <div class="container mx-auto flex justify-center items-center h-screen">
                     <div class="card w-full md:w-1/2 p-6">
@@ -64,14 +65,14 @@ export const AuthController = new Elysia()
             </BaseHTML>
         })
         
-        .post("/", async ({ set, body, setCookie }) => {
+        .post("/", async ({ set, body, loginCookie, BaseHTML }) => {
             const provider = new DataProvider()
             const model: any = provider.getUserByInfo(body.name)
             provider.close()
 
             //validation
             if (await Bun.password.verify(body.password, model["password"])) {
-                setCookie({ id: model["id"], name: model["name"] })
+                loginCookie({ id: model["id"], name: model["name"] })
             } else {
                 return <BaseHTML>
                 <div class="container mx-auto flex justify-center items-center h-screen">
@@ -100,4 +101,4 @@ export const AuthController = new Elysia()
         }, { body: t.Object({ name: t.String(), password: t.String() }) })
     )
 
-    .get("/logout", ({ set, removeCookie }) => { removeCookie(); set.redirect = "/" });
+    .get("/logout", ({ set, logoutCookie }) => { logoutCookie(); set.redirect = "/" });

@@ -27,7 +27,8 @@ export const auth = new Elysia()
 
                 return current_user
             },
-            setCookie: (data: any) => {
+            loginCookie: (data: any) => {
+                
                 //parameter data is an id and username or undefined
                 const message = JSON.stringify(data)
 
@@ -35,7 +36,7 @@ export const auth = new Elysia()
 
                 setCookie('user', `${encryptionObj["message"]};${encryptionObj["key"]};${encryptionObj["iv"]}`);
             },
-            removeCookie: () => {
+            logoutCookie: () => {
                 removeCookie('user')
             }
         }

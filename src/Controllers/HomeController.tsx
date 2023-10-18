@@ -1,15 +1,16 @@
 import { Elysia, t } from "elysia";
 import { html } from "@elysiajs/html";
-import { BaseHTML } from "../Tools/BaseHTML";
+import { baseHTML } from "../Tools/BaseHTML";
 import { auth } from '../Tools/auth';
 import * as elements from "typed-html";
 
 export const HomeController = new Elysia()
     .use(html())
     .use(auth)
+    .use(baseHTML)
 
-    .get("/", ({ isUser }) => {
-        return <BaseHTML isUser={isUser}>
+    .get("/", ({ BaseHTML }) => {
+        return <BaseHTML>
             <div class="text-6xl flex justify-center">
                 MAIN PAGE
             </div>
@@ -23,7 +24,7 @@ export const HomeController = new Elysia()
     })
 
     .group("/hxtrick", (app) => app
-        .get("/", () => {
+        .get("/", ({ BaseHTML }) => {
             return <BaseHTML>
                 <div class="flex w-full h-screen justify-center items-center">
                     <button hx-post="/hxtrick/clicked" hx-swap="outerHTML">
@@ -39,7 +40,7 @@ export const HomeController = new Elysia()
     )
 
     .group("/random", (app) => app
-        .get("/", () => {
+        .get("/", ({ BaseHTML }) => {
             return <BaseHTML>
                 <div class="text-2xl">
                     <button class="hover:underline" hx-post="./random/cat" hx-target="#catimg" hx-swap="innerHTML">get random cat</button>
