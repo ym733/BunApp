@@ -45,11 +45,11 @@ export const HomeController = new Elysia()
                 <div class="text-2xl">
                     <button class="hover:underline" hx-post="./random/cat" hx-target="#catimg" hx-swap="innerHTML">get random cat</button>
                     <br />
-                    <div id="catimg"></div>
+                    <div id="catimg" class="max-w-lg"></div>
                     <br />
                     <button class="hover:underline" hx-post="./random/dog" hx-target="#dogimg" hx-swap="innerHTML">get random dog</button>
                     <br />
-                    <div id="dogimg"></div>
+                    <div id="dogimg" class="max-w-lg"></div>
                 </div>
             </BaseHTML>
         })
