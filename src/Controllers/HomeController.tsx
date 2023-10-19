@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import { html } from "@elysiajs/html";
 import { baseHTML } from "../Tools/BaseHTML";
 import { auth } from '../Tools/auth';

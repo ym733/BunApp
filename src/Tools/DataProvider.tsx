@@ -37,4 +37,10 @@ export class DataProvider {
         const query = this.db.query(queryText);
         query.run();
     }
+
+    deleteUser(id: number) {
+        const queryText = `delete from users where id=${id};`;
+        const query = this.db.query(queryText);
+        query.run();
+    }
 }

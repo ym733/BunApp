@@ -24,16 +24,23 @@ export const AccountController = new Elysia()
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delete</th>
+                        
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {
                         response.map((element: any) => (
-                            <tr>
+                            <tr id={`user${element["id"]}`}>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["id"]}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["name"]}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["email"]}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["password"]}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <button hx-post={`/deleteUser/${element["id"]}`} hx-target={`#user${element["id"]}`} hx-swap="outerHTML">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAvElEQVR4nGNgGCmggYGB4T8a7iDHoKNYDPpPIj6Mz4LDVLDgEMOwBzMoCJ4ZxFhQTYEFVcRYEItFoxUDA4MNHj4Mg/QSBPZYNMIALj4M2zEQARQpsECBGAtYGRgY/pBhwR+oXqLAEzIseMxAQZFBjAVHGEgAy8mwYBkpFnSSYUEHKRbkkGFBNikW+KJptsFigS2aGpAeooEBGcWEPikWcDMwMHwnwfBvUD0kgXgGBoZXRBgOUhNHquFDBwAAvdXKeCV5nnIAAAAASUVORK5CYII=" />
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     }
@@ -115,5 +122,15 @@ export const AccountController = new Elysia()
                 </tbody>
             </table>
         </BaseHTML>
+    })
+    
+    .post("/deleteUser/:id", ({ params: { id } }) => {
+        const provider = new DataProvider()
+        provider.deleteUser(parseInt(id));
+        provider.close()
+        return <tr>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{id}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">SUCCESS</td>
+    </tr>
     });
     
