@@ -1,12 +1,10 @@
 import { Elysia } from "elysia";
 import { html } from "@elysiajs/html";
 import { baseHTML } from "../Tools/BaseHTML";
-import { auth } from '../Tools/auth';
 import * as elements from "typed-html";
 
 export const HomeController = new Elysia()
     .use(html())
-    .use(auth)
     .use(baseHTML)
 
     .get("/", ({ BaseHTML }) => {
@@ -15,10 +13,10 @@ export const HomeController = new Elysia()
                 MAIN PAGE
             </div>
             <ul>
-                <li><a class="hover:underline" href="./getallUsers">get all users</a></li>
-                <li><a class="hover:underline" href="./hxtrick">hxtrick</a></li>
-                <li><a class="hover:underline" href="./getUser">get user</a></li>
-                <li><a class="hover:underline" href="./random">random</a></li>
+                <li><a class="cursor-pointer hover:underline" hx-get="./getallUsers" hx-swap="innerHTML" hx-target="main" hx-push-url="true">get all users</a></li>
+                <li><a class="cursor-pointer hover:underline" hx-get="./hxtrick" hx-swap="innerHTML" hx-target="main" hx-push-url="true">hxtrick</a></li>
+                <li><a class="cursor-pointer hover:underline" hx-get="./getUser" hx-swap="innerHTML" hx-target="main" hx-push-url="true">get user</a></li>
+                <li><a class="cursor-pointer hover:underline" hx-get="./random" hx-swap="innerHTML" hx-target="main" hx-push-url="true">random</a></li>
             </ul>
         </BaseHTML>
     })

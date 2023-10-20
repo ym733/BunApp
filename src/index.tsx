@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import { AuthController } from './Controllers/AuthController';
 import { HomeController } from './Controllers/HomeController';
 import { AccountController } from './Controllers/AccountController'

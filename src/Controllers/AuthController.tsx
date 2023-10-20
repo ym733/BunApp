@@ -58,7 +58,7 @@ export const AuthController = new Elysia()
                             <div class="flex items-center justify-between">
                                 <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" value="Login" />
                             </div>
-                            <a class="hover:underline text-blue-600" href="../register">register</a>
+                            <a class="cursor-pointer hover:underline text-blue-600" hx-get="../register" hx-swap="innerHTML" hx-target="main" hx-push-url="true">register</a>
                         </form>
                     </div>
                 </div>
@@ -90,7 +90,7 @@ export const AuthController = new Elysia()
                             <div class="flex items-center justify-between">
                                 <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" value="Login" />
                             </div>
-                            <a class="hover:underline text-blue-600" href="../register">register</a>
+                            <a class="cursor-pointer hover:underline text-blue-600" hx-get="../register" hx-swap="innerHTML" hx-target="main" hx-push-url="true">register</a>
                         </form>
                     </div>
                 </div>
