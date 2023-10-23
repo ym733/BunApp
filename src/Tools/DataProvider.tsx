@@ -31,6 +31,18 @@ export class DataProvider {
         return query.all()[0];
     }
 
+    nameExists(name:string):boolean {
+        const queryText = `select * from users where name='${name}';`;
+        const query = this.db.query(queryText);
+        return query.all().length != 0;
+    }
+
+    emailExists(email:string):boolean {
+        const queryText = `select * from users where email='${email}';`;
+        const query = this.db.query(queryText);
+        return query.all().length != 0;
+    }
+
     //NON-QUERY
     addUser(name: string, email: string, password: string) {
         const queryText = `insert into users values((select max(id)+1 from users), '${name}', '${email}', '${password}');`;
