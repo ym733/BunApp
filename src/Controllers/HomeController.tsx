@@ -1,4 +1,5 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
+import { readFileSync, writeFileSync, closeSync } from 'fs';
 import { html } from "@elysiajs/html";
 import { baseHTML } from "../Tools/BaseHTML";
 import * as elements from "typed-html";
@@ -64,3 +65,30 @@ export const HomeController = new Elysia()
             return <img src={html[0]["url"]}/>
         })
     )
+    .group("/file", (app) => app
+            .get("/", ({ BaseHTML }) => {
+                return <BaseHTML>
+                    <form action="/file" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" />
+                    <input type="submit" value="Upload File" />
+                    </form>
+                </BaseHTML>
+            })
+            .post('/', async ({ body: { file } }) => {
+                if (file["type"] !== 'image/png') {
+                    return "WRONG FILE TYPE"
+                }
+
+                file.arrayBuffer().then((result) => {
+                    writeFileSync(`src/uploads/${new Date().getTime()}.png`, result)
+                }, (err) => {
+                    console.error(err)
+                })
+
+                return "SUCCESS"
+            }, {
+                body: t.Object({
+                    file: t.File()
+                })
+            })
+        )

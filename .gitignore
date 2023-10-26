@@ -172,3 +172,4 @@ dist
 .idea
 /src/config.json
 /src/Application.db
+/src/uploads/
