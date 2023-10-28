@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { readFileSync, writeFileSync, closeSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { html } from "@elysiajs/html";
 import { baseHTML } from "../Tools/BaseHTML";
 import * as elements from "typed-html";
@@ -74,8 +74,9 @@ export const HomeController = new Elysia()
                     </form>
                 </BaseHTML>
             })
-            .post('/', async ({ body: { file } }) => {
+            .post('/', async ({ body: { file }, set }) => {
                 if (file["type"] !== 'image/png') {
+                    set.status = 400
                     return "WRONG FILE TYPE"
                 }
 
@@ -90,5 +91,16 @@ export const HomeController = new Elysia()
                 body: t.Object({
                     file: t.File()
                 })
+            })
+            
+            .get("/get/:name", ({ params:{ name }, set }) => {
+                const file_path = `src/uploads/${name}`
+                if (existsSync(file_path)){
+                    const blob = new Blob([readFileSync(file_path)])
+                    return blob
+                } else {
+                    set.status = 400
+                    return "No such file or directory"
+                }
             })
         )
