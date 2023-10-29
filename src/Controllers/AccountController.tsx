@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 import { auth } from '../Tools/auth';
+import { readFileSync, existsSync } from 'fs';
 import { user } from '../Models/User';
 import { html } from "@elysiajs/html";
 import { DataProvider } from "../Tools/DataProvider";
@@ -20,6 +21,7 @@ export const AccountController = new Elysia()
             <table>
                 <thead class="bg-gray-50">
                     <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PFP</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -32,6 +34,9 @@ export const AccountController = new Elysia()
                     {
                         response.map((element: any) => (
                             <tr id={`user${element["id"]}`}>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <img src={`./pfp/get/${element["pfp"]}`} width="50px" height="50px">image missing</img>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["id"]}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["name"]}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{element["email"]}</td>
@@ -77,6 +82,7 @@ export const AccountController = new Elysia()
             return <table>
                 <thead class="bg-gray-50">
                     <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PFP</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -85,6 +91,9 @@ export const AccountController = new Elysia()
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <img src={`./pfp/get/${user["pfp"]}`} width="50px" height="50px">image missing</img>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["id"]}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["name"]}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["email"]}</td>
@@ -106,6 +115,7 @@ export const AccountController = new Elysia()
             <table>
                 <thead class="bg-gray-50">
                     <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PFP</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -114,6 +124,9 @@ export const AccountController = new Elysia()
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <img src={`./pfp/get/${user["pfp"]}`} width="50px" height="50px">image missing</img>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["id"]}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["name"]}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user["email"]}</td>
@@ -132,5 +145,16 @@ export const AccountController = new Elysia()
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{id}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">SUCCESS</td>
     </tr>
-    });
+    })
+
+    .get("/pfp/get/:name", ({ params:{ name }, set }) => {
+        const file_path = `src/uploads/${name}`
+        if (existsSync(file_path)){
+            const blob = new Blob([readFileSync(file_path)])
+            return blob
+        } else {
+            set.status = 400
+            return "No such file or directory"
+        }
+    })
     

@@ -25,7 +25,7 @@ export class DataProvider {
         return query.all()[0];
     }
 
-    getUserByID(id: number) : user {
+    getUserByID(id: number) : any {
         const queryText = `select * from users where id='${id}';`;
         const query = this.db.query(queryText);
         return query.all()[0];
@@ -44,8 +44,8 @@ export class DataProvider {
     }
 
     //NON-QUERY
-    addUser(name: string, email: string, password: string) {
-        const queryText = `insert into users values((select max(id)+1 from users), '${name}', '${email}', '${password}');`;
+    addUser(name: string, email: string, password: string, pfp:string) {
+        const queryText = `insert into users values((select max(id)+1 from users), '${name}', '${email}', '${password}', '${pfp}');`;
         const query = this.db.query(queryText);
         query.run();
     }

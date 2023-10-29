@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { auth } from '../Tools/auth';
 import { html } from "@elysiajs/html";
+import { writeFileSync } from 'fs';
 import { baseHTML } from "../Tools/BaseHTML";
 import { DataProvider } from '../Tools/DataProvider';
 import * as elements from "typed-html";
@@ -18,7 +19,7 @@ export const AuthController = new Elysia()
                             <div class="container mx-auto flex justify-center items-center h-screen">
                                 <div class="card w-full md:w-1/2 p-6">
                                     <h2 class="text-center text-2xl font-bold">Register</h2><h2 class="text-center text-2xl font-bold text-red-600">{message}</h2>
-                                    <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="../register">
+                                    <form class="flex flex-col w-full max-w-lg mx-auto space-y-5" method="post" action="../register" enctype="multipart/form-data">
                                         <label for="name" class="text-gray-800 font-medium">Name</label>
                                         <input type="text" name="name" id="name" class="rounded border border-gray-300 p-2" placeholder="Enter your name" />
 
@@ -27,6 +28,9 @@ export const AuthController = new Elysia()
 
                                         <label for="password" class="text-gray-800 font-medium">Password</label>
                                         <input type="password" name="password" id="password" class="rounded border border-gray-300 p-2" placeholder="Enter your password" />
+
+                                        <label for="pfp" class="text-gray-800 font-medium">Profile Picture</label>
+                                        <input type="file" name="pfp" id="pfp" class="rounded border border-gray-300 p-2" />
 
                                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">Submit</button>
                                     </form>
@@ -42,8 +46,12 @@ export const AuthController = new Elysia()
         })
 
         .post("/", async ({ set, body, loginCookie, page }) => {
-            if (body.name == "" || body.password == "" || body.email == "") {
+            if (body.name == "" || body.password == "" || body.email == "" || body.pfp.size == 0) {
                 return page("data is missing")
+            }
+
+            if (body.pfp["type"] !== 'image/png') {
+                return page("wrong file type")
             }
 
             const provider = new DataProvider()
@@ -55,15 +63,22 @@ export const AuthController = new Elysia()
             if (provider.emailExists(body.email)){
                 return page("email already exists")
             }
+            const fileName = `${new Date().getTime()}.png`
 
-            provider.addUser(body.name, body.email, await Bun.password.hash(body.password));
+            body.pfp.arrayBuffer().then((result) => {
+                writeFileSync(`src/uploads/${fileName}`, result)
+            }, (err) => {
+                console.error(err)
+            })
+
+            provider.addUser(body.name, body.email, await Bun.password.hash(body.password), fileName);
             const model: any = provider.getUserByInfo(body.name)
             provider.close()
 
             loginCookie({ id: model["id"], name: model["name"] })
             
             set.redirect = "/"
-            }, { body: t.Object({ name: t.String(), email: t.String(), password: t.String() }) })
+            }, { body: t.Object({ name: t.String(), email: t.String(), password: t.String(), pfp: t.File() }) })
         )
 
     .group("/login", (app) => app
