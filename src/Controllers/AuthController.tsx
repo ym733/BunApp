@@ -1,15 +1,11 @@
 import { Elysia, t } from "elysia";
-import { auth } from '../Tools/auth';
-import { html } from "@elysiajs/html";
 import { writeFileSync } from 'fs';
-import { baseHTML } from "../Tools/BaseHTML";
 import { DataProvider } from '../Tools/DataProvider';
 import * as elements from "typed-html";
+import { MainController } from "./MainController.tsx";
 
 export const AuthController = new Elysia()
-    .use(html())
-    .use(auth)
-    .use(baseHTML)
+    .use(MainController)
 
     .group("/register", (app) => app
             .derive(({BaseHTML}) => {

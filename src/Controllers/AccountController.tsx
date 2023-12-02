@@ -1,19 +1,15 @@
 import { Elysia, t } from "elysia";
-import { auth } from '../Tools/auth';
 import { readFileSync, existsSync } from 'fs';
 import { user } from '../Models/User';
-import { html } from "@elysiajs/html";
 import { DataProvider } from "../Tools/DataProvider";
 import * as elements from "typed-html";
-import { baseHTML } from "../Tools/BaseHTML";
+import { MainController } from "./MainController.tsx";
 
 export const AccountController = new Elysia()
-    .use(html())
-    .use(auth)
-    .use(baseHTML)
+    .use(MainController)
 
     .get("/getallUsers", ({ BaseHTML }) => {
-        const provider = new DataProvider();
+        const provider:DataProvider = new DataProvider();
         const response = provider.getAllUsers();
         provider.close()
 

@@ -1,11 +1,9 @@
 import { Elysia, t } from "elysia";
-import { html } from "@elysiajs/html";
-import { baseHTML } from "../Tools/BaseHTML";
 import * as elements from "typed-html";
+import {MainController} from "./MainController.tsx";
 
 export const HomeController = new Elysia()
-    .use(html())
-    .use(baseHTML)
+    .use(MainController)
 
     .get("/", ({ BaseHTML }) => {
         return <BaseHTML>
