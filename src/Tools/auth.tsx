@@ -3,38 +3,44 @@ import { encryption, DataEncryptor } from './DataEncryptor';
 import { Elysia } from 'elysia';
 import { user } from '../Models/User';
 import { cookie } from '@elysiajs/cookie';
+import { jwt } from '@elysiajs/jwt'
+const config = require('./../config.json');
 
 export const auth = new Elysia()
     .use(cookie())
+    .use(jwt({
+        secret: config["JWTSecret"]
+    }))
 
-    .derive(({ cookie: { user }, setCookie, removeCookie }) => {
+    .derive(({ jwt, cookie: { user }, setCookie, removeCookie, set: {headers} }) => {
         return {
-            getCookie: (): user => {
-                if (user == undefined) return user;
+            getCookie: async () => {
+                console.log(user)
 
-                //returns a full user object or undefined 
-                const encryptionObj = user.split(";")
+                if (user == undefined) return undefined;
 
-                const decryptedData = DataEncryptor.decryptMessage(encryptionObj[0], encryptionObj[1], encryptionObj[2])
+                let current_user = await jwt.verify(user)
 
-                let current_user = JSON.parse(decryptedData)
+                console.log(current_user)
 
-                //by this point we have the id and name of the current user
-                //so we exctract the extra data
+                if (!current_user) {
+                    return undefined;
+                }
+
                 const provider = new DataProvider()
                 current_user = provider.getUserByInfo(current_user["name"])
                 provider.close()
 
                 return current_user
             },
-            loginCookie: (data: any) => {
-                
-                //parameter data is an id and username or undefined
-                const message = JSON.stringify(data)
+            loginCookie: async (data: any) => {
 
-                const encryptionObj: encryption = DataEncryptor.encryptMessage(message)
+                const cookie = await jwt.sign(data);
+                console.log(cookie)
 
-                setCookie('user', `${encryptionObj["message"]};${encryptionObj["key"]};${encryptionObj["iv"]}`);
+                setCookie('user', cookie, {
+                    httpOnly: true
+                });
             },
             logoutCookie: () => {
                 removeCookie('user')
@@ -43,8 +49,10 @@ export const auth = new Elysia()
     })
     .derive(({getCookie}) => {
         return {
-            isUser: (): boolean => {
-                return getCookie() != undefined
+            isUser: () => {
+                getCookie().then((result) => {
+                    return result == undefined
+                })
             }
         }
     });

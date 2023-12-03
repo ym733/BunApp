@@ -1,5 +1,4 @@
 import { Database } from "bun:sqlite";
-import { user } from "../Models/User";
 
 export class DataProvider {
     private db: Database;

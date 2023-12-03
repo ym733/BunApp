@@ -8,7 +8,7 @@ export const AuthController = new Elysia()
     .use(MainController)
 
     .group("/register", (app) => app
-            .derive(({BaseHTML}) => {
+        .derive(({BaseHTML}) => {
                 return {
                     page: (message?:string) => {
                         return <BaseHTML>
