@@ -7,7 +7,7 @@ export const baseHTML = new Elysia()
 
   .derive(({ isUser, request }) => {
     return {
-      BaseHTML : ({ children }: elements.Children) => {
+      BaseHTML : async ({ children }: elements.Children) => {
         if (request.headers.get("Hx-Request")){     
           return `${children.join("")}`
         } else {
@@ -29,7 +29,7 @@ export const baseHTML = new Elysia()
           
             <ul class="flex space-x-4">
               ${
-                (isUser()) ? 
+                (await isUser()) ?
                 `<li><a class="cursor-pointer hover:underline" href="./logout" hx-swap="innerHTML" hx-target="main" hx-push-url="true">logout</a></li>
                 <li><a class="cursor-pointer hover:underline" hx-get="./currentUser" hx-swap="innerHTML" hx-target="main" hx-push-url="true">current user</a></li>`
                 :

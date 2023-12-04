@@ -71,7 +71,7 @@ export const AuthController = new Elysia()
             const model: any = provider.getUserByInfo(body.name)
             provider.close()
 
-            loginCookie({ id: model["id"], name: model["name"] })
+            await loginCookie({ id: model["id"], name: model["name"] })
             
             set.redirect = "/"
             }, { body: t.Object({ name: t.String(), email: t.String(), password: t.String(), pfp: t.File() }) })
@@ -126,7 +126,7 @@ export const AuthController = new Elysia()
 
             //validation
             if (await Bun.password.verify(body.password, model["password"])) {
-                loginCookie({ id: model["id"], name: model["name"] })
+                await loginCookie({ id: model["id"], name: model["name"] })
             } else {
                 return page("wrong password")
             }

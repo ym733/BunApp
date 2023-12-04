@@ -100,8 +100,8 @@ export const AccountController = new Elysia()
         }, { body: t.Object({ id: t.String() }) })
     )
 
-    .get("/currentUser", ({ getCookie, BaseHTML }) => {
-        const user:user = getCookie();
+    .get("/currentUser", async ({ getCookie, BaseHTML }) => {
+        const user:user = await getCookie();
         
         if (user == undefined) {
             return 'user undefined'

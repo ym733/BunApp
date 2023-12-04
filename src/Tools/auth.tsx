@@ -15,13 +15,9 @@ export const auth = new Elysia()
     .derive(({ jwt, cookie: { user }, setCookie, removeCookie, set: {headers} }) => {
         return {
             getCookie: async () => {
-                console.log(user)
-
                 if (user == undefined) return undefined;
 
                 let current_user = await jwt.verify(user)
-
-                console.log(current_user)
 
                 if (!current_user) {
                     return undefined;
@@ -34,11 +30,7 @@ export const auth = new Elysia()
                 return current_user
             },
             loginCookie: async (data: any) => {
-
-                const cookie = await jwt.sign(data);
-                console.log(cookie)
-
-                setCookie('user', cookie, {
+                setCookie('user', await jwt.sign(data), {
                     httpOnly: true
                 });
             },
@@ -49,10 +41,8 @@ export const auth = new Elysia()
     })
     .derive(({getCookie}) => {
         return {
-            isUser: () => {
-                getCookie().then((result) => {
-                    return result == undefined
-                })
+            isUser: async () => {
+                return await getCookie() != undefined
             }
         }
     });
