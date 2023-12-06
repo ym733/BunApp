@@ -1,13 +1,11 @@
 import { Elysia } from "elysia";
 import { AuthController } from './Controllers/AuthController';
 import { HomeController } from './Controllers/HomeController';
-import { AccountController } from './Controllers/AccountController'
-import { WebSocketController} from "./Controllers/WebSocketController.tsx";
+import { AccountController } from './Controllers/AccountController';
 
 console.log("Program running")
 
 const app = new Elysia()
-    .use(WebSocketController)
     .use(AuthController)
     .use(HomeController)
     .use(AccountController)
